@@ -1,4 +1,4 @@
--- [[ ANDYXHUB - MODERN UI: TP & AUTOCOLECT ALL ]] --
+-- [[ ANDYXHUB - FULL UI RESTORED - CENTERED AUTOCOLECT ]] --
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
@@ -12,16 +12,17 @@ local targetNames = {"Strawberelli Flamingelli", "Trippi Trapoppi", "Tim Cheese"
 -- UI PRINCIPALA
 local ScreenGui = Instance.new("ScreenGui", CoreGui)
 
--- LOADING TEXT (Fara fundal negru)
+-- LOADING TEXT
 local LoadingLabel = Instance.new("TextLabel", ScreenGui)
-LoadingLabel.Size = UDim2.new(0, 300, 0, 50)
-LoadingLabel.Position = UDim2.new(0.5, -150, 0.5, -25)
-LoadingLabel.BackgroundTransparency = 1
-LoadingLabel.Text = "AndyxHUB Loading"
-LoadingLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-LoadingLabel.Font = Enum.Font.GothamBold
-LoadingLabel.TextSize = 35
-LoadingLabel.ZIndex = 100
+LoadingLabel.Size = UDim2.new(0, 300, 0, 50); LoadingLabel.Position = UDim2.new(0.5, -150, 0.5, -25)
+LoadingLabel.BackgroundTransparency = 1; LoadingLabel.Text = "AndyxHUB Loading"
+LoadingLabel.TextColor3 = Color3.fromRGB(255, 255, 255); LoadingLabel.Font = Enum.Font.GothamBold; LoadingLabel.TextSize = 35; LoadingLabel.ZIndex = 100
+
+-- BUTON MIC TOGGLE (A)
+local ToggleMenuBtn = Instance.new("TextButton", ScreenGui)
+ToggleMenuBtn.Size = UDim2.new(0, 40, 0, 40); ToggleMenuBtn.Position = UDim2.new(0, 10, 0.5, -20)
+ToggleMenuBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30); ToggleMenuBtn.Text = "A"; ToggleMenuBtn.TextColor3 = Color3.new(1, 1, 1)
+ToggleMenuBtn.Font = Enum.Font.GothamBold; ToggleMenuBtn.TextSize = 20; ToggleMenuBtn.Visible = false; Instance.new("UICorner", ToggleMenuBtn)
 
 -- FRAME MENIU
 local Main = Instance.new("Frame", ScreenGui)
@@ -29,7 +30,9 @@ Main.Size = UDim2.new(0, 350, 0, 500); Main.Position = UDim2.new(0.5, -175, 0.5,
 Main.BackgroundColor3 = Color3.fromRGB(15, 15, 15); Main.Active = true; Main.Draggable = true; Main.Visible = false
 Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 10)
 
--- HEADER
+ToggleMenuBtn.MouseButton1Click:Connect(function() Main.Visible = not Main.Visible end)
+
+-- HEADER (RESTORED)
 local Title = Instance.new("TextLabel", Main)
 Title.Size = UDim2.new(1, 0, 0, 30); Title.Position = UDim2.new(0, 15, 0, 10)
 Title.Text = "🔥 ANDYXHUB - https://discord.gg/TBeX3sYy"; Title.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -42,7 +45,7 @@ InfoLabel.Font = Enum.Font.Gotham; InfoLabel.TextSize = 9; InfoLabel.TextXAlignm
 
 -- SCROLL AREA
 local Scroll = Instance.new("ScrollingFrame", Main)
-Scroll.Size = UDim2.new(1, -20, 1, -150); Scroll.Position = UDim2.new(0, 10, 0, 70); Scroll.BackgroundTransparency = 1; Scroll.ScrollBarThickness = 2
+Scroll.Size = UDim2.new(1, -20, 1, -90); Scroll.Position = UDim2.new(0, 10, 0, 70); Scroll.BackgroundTransparency = 1; Scroll.ScrollBarThickness = 2
 local Layout = Instance.new("UIListLayout", Scroll); Layout.Padding = UDim.new(0, 8)
 
 -- FUNCTIE TELEPORT
@@ -53,51 +56,38 @@ local function smartTeleport(targetPart)
         root.CFrame = targetPart.CFrame * CFrame.new(0, -1, 0)
         task.wait(0.1)
         root.Anchored = true
-        task.wait(0.4)
+        task.wait(0.3)
         root.Anchored = false
     end
 end
 
--- CREARE CARDURI
+-- CARDURI CU DESIGN (RESTORED)
 for _, name in pairs(targetNames) do
     local Card = Instance.new("Frame", Scroll)
     Card.Size = UDim2.new(1, -10, 0, 60); Card.BackgroundColor3 = Color3.fromRGB(25, 25, 25); Instance.new("UICorner", Card)
     
-    local Line = Instance.new("Frame", Card)
+    local Line = Instance.new("Frame", Card) -- LINIA ROSIE
     Line.Size = UDim2.new(1, 0, 0, 2); Line.Position = UDim2.new(0, 0, 1, -2); Line.BackgroundColor3 = Color3.fromRGB(255, 50, 50); Line.BorderSizePixel = 0
 
-    local Icon = Instance.new("TextLabel", Card)
+    local Icon = Instance.new("TextLabel", Card) -- ICONITA $
     Icon.Text = "$"; Icon.Size = UDim2.new(0, 30, 0, 30); Icon.Position = UDim2.new(0, 10, 0, 15); Icon.TextColor3 = Color3.fromRGB(0, 255, 100); Icon.Font = Enum.Font.GothamBold; Icon.TextSize = 18; Icon.BackgroundTransparency = 1
 
     local NameLabel = Instance.new("TextLabel", Card)
-    NameLabel.Text = name; NameLabel.Size = UDim2.new(0, 180, 0, 40); NameLabel.Position = UDim2.new(0, 45, 0, 10); NameLabel.TextColor3 = Color3.fromRGB(255, 255, 255); NameLabel.Font = Enum.Font.GothamBold; NameLabel.TextSize = 13; NameLabel.TextXAlignment = Enum.TextXAlignment.Left; NameLabel.BackgroundTransparency = 1
-
-    local TpBtn = Instance.new("TextButton", Card)
-    TpBtn.Size = UDim2.new(0, 60, 0, 30); TpBtn.Position = UDim2.new(1, -70, 0.5, -15); TpBtn.BackgroundColor3 = Color3.fromRGB(40, 100, 255); TpBtn.Text = "TP"; TpBtn.TextColor3 = Color3.new(1, 1, 1); TpBtn.Font = Enum.Font.GothamBold; Instance.new("UICorner", TpBtn)
-
-    TpBtn.MouseButton1Click:Connect(function()
-        for _, v in pairs(workspace:GetDescendants()) do
-            if v:IsA("TouchTransmitter") and v.Parent and (v.Parent.Name == name or (v.Parent:FindFirstChildWhichIsA("BillboardGui", true) and v.Parent:FindFirstChildWhichIsA("BillboardGui", true):FindFirstChildWhichIsA("TextLabel").Text == name)) then
-                smartTeleport(v.Parent)
-                break
-            end
-        end
-    end)
+    NameLabel.Text = name; NameLabel.Size = UDim2.new(1, -60, 0, 40); NameLabel.Position = UDim2.new(0, 45, 0, 10); NameLabel.TextColor3 = Color3.fromRGB(255, 255, 255); NameLabel.Font = Enum.Font.GothamBold; NameLabel.TextSize = 13; NameLabel.TextXAlignment = Enum.TextXAlignment.Left; NameLabel.BackgroundTransparency = 1
 end
 Scroll.CanvasSize = UDim2.new(0, 0, 0, #targetNames * 68)
 
--- BUTON AUTOCOLECT
-local ToggleBtn = Instance.new("TextButton", Main)
-ToggleBtn.Size = UDim2.new(1, -30, 0, 50); ToggleBtn.Position = UDim2.new(0, 15, 1, -65); ToggleBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50); ToggleBtn.Text = "AutoColect ALL: OFF"; ToggleBtn.TextColor3 = Color3.new(1, 1, 1); ToggleBtn.Font = Enum.Font.GothamBold; Instance.new("UICorner", ToggleBtn)
+-- BUTON AUTOCOLECT (CENTRAT)
+local ToggleBtn = Instance.new("TextButton", ScreenGui)
+ToggleBtn.Size = UDim2.new(0, 250, 0, 55); ToggleBtn.Position = UDim2.new(0.5, -125, 0.5, -27)
+ToggleBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50); ToggleBtn.Text = "AutoColect ALL: OFF"; ToggleBtn.TextColor3 = Color3.new(1, 1, 1)
+ToggleBtn.Font = Enum.Font.GothamBold; ToggleBtn.TextSize = 18; ToggleBtn.Visible = false; Instance.new("UICorner", ToggleBtn)
 
 ToggleBtn.MouseButton1Click:Connect(function()
     autoCollectEnabled = not autoCollectEnabled
-    if autoCollectEnabled then
-        ToggleBtn.Text = "AutoColect ALL: ON"; ToggleBtn.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
-    else
-        ToggleBtn.Text = "AutoColect ALL: OFF"; ToggleBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-        if LP.Character and LP.Character:FindFirstChild("HumanoidRootPart") then LP.Character.HumanoidRootPart.Anchored = false end
-    end
+    ToggleBtn.Text = autoCollectEnabled and "AutoColect ALL: ON" or "AutoColect ALL: OFF"
+    ToggleBtn.BackgroundColor3 = autoCollectEnabled and Color3.fromRGB(50, 200, 50) or Color3.fromRGB(200, 50, 50)
+    if not autoCollectEnabled and LP.Character and LP.Character:FindFirstChild("HumanoidRootPart") then LP.Character.HumanoidRootPart.Anchored = false end
 end)
 
 -- LOGICA AUTO-COLLECT
@@ -120,22 +110,14 @@ task.spawn(function()
     end
 end)
 
--- LOGICA LOADING (Text animat)
+-- LOGICA LOADING
 task.spawn(function()
     for i = 1, 3 do
-        LoadingLabel.Text = "AndyxHUB Loading."
-        task.wait(0.4)
-        LoadingLabel.Text = "AndyxHUB Loading.."
-        task.wait(0.4)
-        LoadingLabel.Text = "AndyxHUB Loading..."
-        task.wait(0.4)
+        LoadingLabel.Text = "AndyxHUB Loading."; task.wait(0.4)
+        LoadingLabel.Text = "AndyxHUB Loading.."; task.wait(0.4)
+        LoadingLabel.Text = "AndyxHUB Loading..."; task.wait(0.4)
     end
-    
-    -- Efect de disparitie lina
     TweenService:Create(LoadingLabel, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
-    task.wait(0.5)
-    LoadingLabel:Destroy()
-    
-    -- Afisare meniu
-    Main.Visible = true
+    task.wait(0.5); LoadingLabel:Destroy()
+    Main.Visible = true; ToggleMenuBtn.Visible = true; ToggleBtn.Visible = true
 end)
