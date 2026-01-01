@@ -1,0 +1,139 @@
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+local CoreGui = game:GetService("CoreGui")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+
+-- Curățare UI anterior
+if CoreGui:FindFirstChild("Andyxx7BlockerUI") then
+    CoreGui.Andyxx7BlockerUI:Destroy()
+end
+
+-- Creare UI Principal
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "Andyxx7BlockerUI"
+ScreenGui.Parent = CoreGui
+
+local MainFrame = Instance.new("Frame")
+MainFrame.Name = "MainFrame"
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+MainFrame.BorderColor3 = Color3.fromRGB(255, 115, 20)
+MainFrame.BorderSizePixel = 2
+MainFrame.Position = UDim2.new(0.1, 0, 0.3, 0)
+MainFrame.Size = UDim2.new(0, 280, 0, 360)
+MainFrame.Active = true
+MainFrame.Draggable = true
+MainFrame.Parent = ScreenGui
+
+local Corner = Instance.new("UICorner")
+Corner.CornerRadius = UDim.new(0, 6)
+Corner.Parent = MainFrame
+
+-- Header cu numele scris cu litere mici
+local Header = Instance.new("TextLabel")
+Header.Name = "Header"
+Header.Text = "andyxx7" -- Litere mici conform cerinței
+Header.Font = Enum.Font.GothamBold
+Header.TextColor3 = Color3.fromRGB(255, 255, 255)
+Header.TextSize = 18
+Header.Size = UDim2.new(1, 0, 0, 50)
+Header.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+Header.Parent = MainFrame
+
+local HeaderCorner = Instance.new("UICorner")
+HeaderCorner.CornerRadius = UDim.new(0, 6)
+HeaderCorner.Parent = Header
+
+-- Lista de Jucători
+local PlayerList = Instance.new("ScrollingFrame")
+PlayerList.Name = "PlayerList"
+PlayerList.Position = UDim2.new(0, 10, 0, 60)
+PlayerList.Size = UDim2.new(1, -20, 0, 260)
+PlayerList.BackgroundTransparency = 1
+PlayerList.BorderSizePixel = 0
+PlayerList.CanvasSize = UDim2.new(0, 0, 0, 0)
+PlayerList.ScrollBarThickness = 2
+PlayerList.Parent = MainFrame
+
+local UIList = Instance.new("UIListLayout")
+UIList.Padding = UDim.new(0, 8)
+UIList.Parent = PlayerList
+
+-- Design: Dunga portocalie de jos
+local BottomLine = Instance.new("Frame")
+BottomLine.Size = UDim2.new(0.9, 0, 0, 4)
+BottomLine.Position = UDim2.new(0.05, 0, 1, -20)
+BottomLine.BackgroundColor3 = Color3.fromRGB(255, 115, 20)
+BottomLine.BorderSizePixel = 0
+BottomLine.Parent = MainFrame
+
+-- Funcția de click automat
+local function ClickConfirmButton()
+    task.wait(0.25)
+    local viewportSize = workspace.CurrentCamera.ViewportSize
+    local centerX = viewportSize.X / 2
+    local centerY = viewportSize.Y / 2
+    local targetY = centerY + 55 
+    
+    for i = 1, 6 do
+        VirtualInputManager:SendMouseButtonEvent(centerX, targetY, 0, true, game, 0)
+        VirtualInputManager:SendMouseButtonEvent(centerX, targetY, 0, false, game, 0)
+        task.wait(0.01)
+    end
+end
+
+-- Funcție de refresh listă
+local function Refresh()
+    for _, v in pairs(PlayerList:GetChildren()) do
+        if v:IsA("Frame") then v:Destroy() end
+    end
+
+    for _, p in pairs(Players:GetPlayers()) do
+        if p ~= Players.LocalPlayer then
+            local ItemFrame = Instance.new("Frame")
+            ItemFrame.Size = UDim2.new(1, -5, 0, 40)
+            ItemFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+            ItemFrame.BackgroundTransparency = 0.3
+            ItemFrame.Parent = PlayerList
+            
+            local ItemCorner = Instance.new("UICorner")
+            ItemCorner.CornerRadius = UDim.new(0, 4)
+            ItemCorner.Parent = ItemFrame
+
+            local NameLabel = Instance.new("TextLabel")
+            NameLabel.Text = p.DisplayName
+            NameLabel.Font = Enum.Font.Gotham
+            NameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+            NameLabel.TextSize = 14
+            NameLabel.Size = UDim2.new(0.6, 0, 1, 0)
+            NameLabel.Position = UDim2.new(0, 10, 0, 0)
+            NameLabel.BackgroundTransparency = 1
+            NameLabel.TextXAlignment = Enum.TextXAlignment.Left
+            NameLabel.Parent = ItemFrame
+
+            local BlockBtn = Instance.new("TextButton")
+            BlockBtn.Name = "BlockBtn"
+            BlockBtn.Text = "BLOCK"
+            BlockBtn.Font = Enum.Font.GothamBold
+            BlockBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+            BlockBtn.TextSize = 12
+            BlockBtn.BackgroundColor3 = Color3.fromRGB(180, 40, 40)
+            BlockBtn.Size = UDim2.new(0.3, 0, 0.7, 0)
+            BlockBtn.Position = UDim2.new(0.65, 0, 0.15, 0)
+            BlockBtn.Parent = ItemFrame
+            
+            local BtnCorner = Instance.new("UICorner")
+            BtnCorner.CornerRadius = UDim.new(0, 4)
+            BtnCorner.Parent = BlockBtn
+
+            BlockBtn.MouseButton1Click:Connect(function()
+                StarterGui:SetCore("PromptBlockPlayer", p)
+                ClickConfirmButton()
+            end)
+        end
+    end
+    PlayerList.CanvasSize = UDim2.new(0, 0, 0, UIList.AbsoluteContentSize.Y)
+end
+
+Players.PlayerAdded:Connect(Refresh)
+Players.PlayerRemoving:Connect(Refresh)
+Refresh()
